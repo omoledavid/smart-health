@@ -19,7 +19,7 @@ const toggleDark = useToggle(isDark);
                 <div class="grid h-14 w-14 place-items-center rounded-2xl bg-white/20 backdrop-blur mb-8">
                     <SparklesIcon class="h-7 w-7" />
                 </div>
-                <h2 class="text-4xl font-bold mb-4">Welcome back to Preclinic</h2>
+                <h2 class="text-4xl font-bold mb-4">Welcome back to SmartHealth</h2>
                 <p class="text-brand-100 text-lg">Streamlined clinical operations — patients, appointments, billing, and messaging in one place.</p>
             </div>
         </div>
@@ -36,7 +36,7 @@ const toggleDark = useToggle(isDark);
                     <span class="grid h-10 w-10 place-items-center rounded-xl bg-brand-600 text-white">
                         <SparklesIcon class="h-5 w-5" />
                     </span>
-                    <span class="text-xl font-semibold text-slate-900 dark:text-white">Preclinic</span>
+                    <span class="text-xl font-semibold text-slate-900 dark:text-white">SmartHealth</span>
                 </div>
                 <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Sign in to your account</h1>
                 <p class="mt-1 text-sm text-slate-500">Enter your credentials to access the dashboard.</p>

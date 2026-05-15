@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { computed } from 'vue';
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import StatusPill from '@/Components/StatusPill.vue';
 import dayjs from 'dayjs';
@@ -38,7 +38,7 @@ const statusOptions = [
 
 <template>
     <Head :title="`Claim ${claim.claim_number || claim.id}`" />
-    <PreclinicLayout
+    <SmartHealthLayout
         :title="`Claim ${claim.claim_number || '#' + claim.id}`"
         :breadcrumbs="[{ label: 'Insurance Claims', href: route('claims.index') }, { label: claim.claim_number || '#' + claim.id }]"
     >
@@ -159,5 +159,5 @@ const statusOptions = [
                 </form>
             </Card>
         </div>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

@@ -1,6 +1,6 @@
-<script setup>
+﻿<script setup>
 import { Head, useForm } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import StatusPill from '@/Components/StatusPill.vue';
 import dayjs from 'dayjs';
@@ -14,7 +14,7 @@ const submit = () => form.post(route('invoices.payments', props.invoice.id), { o
 
 <template>
     <Head :title="`Invoice ${invoice.number}`" />
-    <PreclinicLayout :title="`Invoice ${invoice.number}`" :breadcrumbs="[{ label: 'Billing', href: route('invoices.index') }, { label: invoice.number }]">
+    <SmartHealthLayout :title="`Invoice ${invoice.number}`" :breadcrumbs="[{ label: 'Billing', href: route('invoices.index') }, { label: invoice.number }]">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
             <Card class="lg:col-span-2" title="Invoice">
                 <div class="flex justify-between mb-4">
@@ -67,5 +67,5 @@ const submit = () => form.post(route('invoices.payments', props.invoice.id), { o
                 </div>
             </Card>
         </div>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

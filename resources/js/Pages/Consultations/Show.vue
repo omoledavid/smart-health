@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { ref, computed, watch } from 'vue';
 import { router, useForm, usePage } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import VoiceTextarea from '@/Components/VoiceTextarea.vue';
 import SoapPreview from '@/Components/SoapPreview.vue';
 
@@ -63,7 +63,7 @@ const generateLabel = computed(() => (generating.value
 
 <template>
     <Head :title="`${consultation.patient_name} · Consultation`" />
-    <PreclinicLayout>
+    <SmartHealthLayout>
         <div class="mb-6 flex items-center justify-between">
             <div>
                 <Link :href="route('consultations.index')" class="text-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400">
@@ -139,5 +139,5 @@ const generateLabel = computed(() => (generating.value
                 />
             </section>
         </div>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

@@ -174,14 +174,13 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Appointments — past, today, future
-        $statusOptions = [Appointment::STATUS_COMPLETED, Appointment::STATUS_CONFIRMED, Appointment::STATUS_SCHEDULED];
+        // Appointments — all in the past (up to 60 days ago through today)
         for ($i = 0; $i < 60; $i++) {
-            $when = Carbon::now()->addDays(rand(-60, 30))->setTime(rand(9, 16), [0, 15, 30, 45][rand(0, 3)]);
+            $when = Carbon::now()->subDays(rand(0, 60))->setTime(rand(9, 16), [0, 15, 30, 45][rand(0, 3)]);
             $doctor = $doctors->random();
             $patient = $patients->random();
             $service = $services->random();
-            $status = $when->isPast() ? Appointment::STATUS_COMPLETED : $statusOptions[rand(0, 2)];
+            $status = $when->isFuture() ? Appointment::STATUS_SCHEDULED : Appointment::STATUS_COMPLETED;
 
             Appointment::create([
                 'patient_id' => $patient->id,

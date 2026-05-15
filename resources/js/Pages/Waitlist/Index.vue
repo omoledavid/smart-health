@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { computed, ref } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import SearchableSelect from '@/Components/SearchableSelect.vue';
 import { PlusIcon } from '@heroicons/vue/24/outline';
@@ -58,7 +58,7 @@ const cancelEntry = (id) => {
 
 <template>
     <Head title="Waitlist" />
-    <PreclinicLayout title="Patient Waitlist">
+    <SmartHealthLayout title="Patient Waitlist">
         <template #actions>
             <button @click="showForm = !showForm"
                 class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium">
@@ -153,5 +153,5 @@ const cancelEntry = (id) => {
                 </tbody>
             </table>
         </Card>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

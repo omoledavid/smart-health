@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { computed, ref, nextTick, watch } from 'vue';
 import { Head, Link, useForm, usePage, router } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import SearchableSelect from '@/Components/SearchableSelect.vue';
 import {
     PlusIcon, MagnifyingGlassIcon, PhoneIcon, VideoCameraIcon,
@@ -126,7 +126,7 @@ function avatarColor(name) {
 
 <template>
     <Head title="Messages" />
-    <PreclinicLayout title="" :full-bleed="true">
+    <SmartHealthLayout title="" :full-bleed="true">
         <div class="flex h-[calc(100vh-4rem)] overflow-hidden">
 
                 <!-- ── LEFT PANEL ── -->
@@ -362,5 +362,5 @@ function avatarColor(name) {
                     </template>
                 </div>
         </div>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { computed, ref } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import StatCard from '@/Components/StatCard.vue';
 import Card from '@/Components/Card.vue';
 import StatusPill from '@/Components/StatusPill.vue';
@@ -46,7 +46,7 @@ const inMonth = (d) => d.isSame(calRef.value, 'month');
 
 <template>
     <Head title="Admin Dashboard" />
-    <PreclinicLayout title="Admin Dashboard">
+    <SmartHealthLayout title="Admin Dashboard">
         <template #actions>
             <Link :href="route('appointments.create')" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium">
                 <PlusIcon class="h-4 w-4" /> New Appointment
@@ -141,5 +141,5 @@ const inMonth = (d) => d.isSame(calRef.value, 'month');
                 </Card>
             </div>
         </div>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

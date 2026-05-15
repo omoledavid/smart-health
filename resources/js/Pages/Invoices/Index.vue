@@ -1,6 +1,6 @@
-<script setup>
+﻿<script setup>
 import { Head, Link } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import StatCard from '@/Components/StatCard.vue';
 import StatusPill from '@/Components/StatusPill.vue';
@@ -17,7 +17,7 @@ const isAdmin = computed(() => user.value?.role === 'admin');
 
 <template>
     <Head title="Billing" />
-    <PreclinicLayout title="Billing & Invoices">
+    <SmartHealthLayout title="Billing & Invoices">
         <template #actions>
             <div v-if="isAdmin" class="flex gap-2">
                 <Link :href="route('claims.index')" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium">
@@ -54,5 +54,5 @@ const isAdmin = computed(() => user.value?.role === 'admin');
                 </tbody>
             </table>
         </Card>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

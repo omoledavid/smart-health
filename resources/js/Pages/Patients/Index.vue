@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import StatCard from '@/Components/StatCard.vue';
 import { PlusIcon, MagnifyingGlassIcon, UsersIcon, UserPlusIcon, HeartIcon, CheckBadgeIcon } from '@heroicons/vue/24/outline';
@@ -15,7 +15,7 @@ const search = () => router.get(route('patients.index'), { q: q.value }, { prese
 
 <template>
     <Head title="Patients" />
-    <PreclinicLayout title="Patients">
+    <SmartHealthLayout title="Patients">
         <template #actions>
             <Link :href="route('patients.create')" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium">
                 <PlusIcon class="h-4 w-4" /> Add Patient
@@ -90,5 +90,5 @@ const search = () => router.get(route('patients.index'), { q: q.value }, { prese
                 </div>
             </div>
         </Card>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

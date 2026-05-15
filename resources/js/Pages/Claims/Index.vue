@@ -1,6 +1,6 @@
-<script setup>
+﻿<script setup>
 import { Head, Link } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import StatCard from '@/Components/StatCard.vue';
 import StatusPill from '@/Components/StatusPill.vue';
@@ -14,7 +14,7 @@ const money = (c) => '$' + ((c ?? 0) / 100).toFixed(2);
 
 <template>
     <Head title="Insurance Claims" />
-    <PreclinicLayout title="Insurance Claims">
+    <SmartHealthLayout title="Insurance Claims">
         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
             <StatCard label="Total Claims" :value="stats.total" :icon="ShieldCheckIcon" icon-bg="bg-brand-600" />
             <StatCard label="Approved" :value="money(stats.approved_cents)" :icon="BanknotesIcon" icon-bg="bg-emerald-500" />
@@ -73,5 +73,5 @@ const money = (c) => '$' + ((c ?? 0) / 100).toFixed(2);
                 </div>
             </div>
         </Card>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

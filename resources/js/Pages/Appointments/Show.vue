@@ -1,6 +1,6 @@
-<script setup>
+﻿<script setup>
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import StatusPill from '@/Components/StatusPill.vue';
 import { DocumentTextIcon } from '@heroicons/vue/24/outline';
@@ -18,7 +18,7 @@ const canStart = !props.appointment.consultation && ['scheduled', 'confirmed', '
 
 <template>
     <Head :title="`Appointment #${appointment.id}`" />
-    <PreclinicLayout
+    <SmartHealthLayout
         :title="`Appointment #${appointment.id}`"
         :breadcrumbs="[{ label: 'Appointments', href: route('appointments.index') }, { label: '#' + appointment.id }]"
     >
@@ -109,5 +109,5 @@ const canStart = !props.appointment.consultation && ['scheduled', 'confirmed', '
                 </div>
             </Card>
         </div>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

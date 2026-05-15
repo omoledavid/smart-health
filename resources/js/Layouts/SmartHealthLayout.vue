@@ -9,6 +9,7 @@ import {
     SunIcon, MoonIcon, ChevronDownIcon, Bars3Icon, XMarkIcon, SparklesIcon,
     ArrowLeftStartOnRectangleIcon, ShieldCheckIcon, ChartBarIcon,
     ClipboardDocumentListIcon, QueueListIcon, ArrowTopRightOnSquareIcon,
+    BuildingOffice2Icon,
 } from '@heroicons/vue/24/outline';
 
 defineProps({
@@ -63,6 +64,7 @@ const navGroups = computed(() => {
         { name: 'Messages', href: route('messages.index'), icon: ChatBubbleLeftRightIcon, route: 'messages.*' },
     ];
     if (role.value === 'admin' || role.value === 'doctor') {
+        opsItems.push({ name: 'Insurance Providers', href: route('insurance-providers.index'), icon: BuildingOffice2Icon, route: 'insurance-providers.*' });
         opsItems.push({ name: 'Insurance Claims', href: route('claims.index'), icon: ShieldCheckIcon, route: 'claims.*' });
         opsItems.push({ name: 'Waitlist', href: route('waitlist.index'), icon: QueueListIcon, route: 'waitlist.*' });
         opsItems.push({ name: 'Care Plans', href: route('care-plans.index'), icon: ClipboardDocumentListIcon, route: 'care-plans.*' });
@@ -102,7 +104,7 @@ const logout = () => router.post(route('logout'));
                     <span class="grid h-9 w-9 place-items-center rounded-xl bg-brand-600 text-white">
                         <SparklesIcon class="h-5 w-5" />
                     </span>
-                    <span class="text-lg font-semibold text-slate-900 dark:text-white">Preclinic</span>
+                    <span class="text-lg font-semibold text-slate-900 dark:text-white">SmartHealth</span>
                 </Link>
                 <button class="lg:hidden text-slate-500" @click="sidebarOpen = false">
                     <XMarkIcon class="h-6 w-6" />

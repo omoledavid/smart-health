@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { ref } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import Input from '@/Components/Input.vue';
 import { PlusIcon } from '@heroicons/vue/24/outline';
@@ -14,7 +14,7 @@ const submit = () => form.post(route('specializations.store'), { onSuccess: () =
 
 <template>
     <Head title="Specializations" />
-    <PreclinicLayout title="Specializations">
+    <SmartHealthLayout title="Specializations">
         <template #actions>
             <button @click="showAdd = !showAdd" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-600 text-white text-sm font-medium"><PlusIcon class="h-4 w-4" /> Add</button>
         </template>
@@ -33,5 +33,5 @@ const submit = () => form.post(route('specializations.store'), { onSuccess: () =
                 <p class="text-sm text-slate-500 mt-1">{{ s.description || '—' }}</p>
             </Card>
         </div>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

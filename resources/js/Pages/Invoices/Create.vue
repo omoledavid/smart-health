@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { computed } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import SearchableSelect from '@/Components/SearchableSelect.vue';
 import { PlusIcon, TrashIcon } from '@heroicons/vue/24/outline';
@@ -74,7 +74,7 @@ function submit() {
 
 <template>
     <Head title="New Invoice" />
-    <PreclinicLayout title="New Invoice" :breadcrumbs="[{ label: 'Billing', href: route('invoices.index') }, { label: 'New Invoice' }]">
+    <SmartHealthLayout title="New Invoice" :breadcrumbs="[{ label: 'Billing', href: route('invoices.index') }, { label: 'New Invoice' }]">
         <form @submit.prevent="submit" class="space-y-5">
             <Card title="Invoice Details">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -183,5 +183,5 @@ function submit() {
                 </button>
             </div>
         </form>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

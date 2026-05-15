@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { computed, ref } from 'vue';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import StatusPill from '@/Components/StatusPill.vue';
 import { PlusIcon, CheckIcon } from '@heroicons/vue/24/outline';
@@ -38,7 +38,7 @@ const doneTasks = computed(() => props.plan.tasks?.filter(t => t.status === 'com
 
 <template>
     <Head :title="plan.title" />
-    <PreclinicLayout :title="plan.title" :breadcrumbs="[{ label: 'Care Plans', href: route('care-plans.index') }, { label: plan.title }]">
+    <SmartHealthLayout :title="plan.title" :breadcrumbs="[{ label: 'Care Plans', href: route('care-plans.index') }, { label: plan.title }]">
         <template #actions>
             <select v-model="statusForm.status" @change="statusForm.patch(route('care-plans.status', plan.id))"
                 class="px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm">
@@ -158,5 +158,5 @@ const doneTasks = computed(() => props.plan.tasks?.filter(t => t.status === 'com
                 </Card>
             </div>
         </div>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

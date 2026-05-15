@@ -19,6 +19,7 @@ const highlighted = ref(-1);
 const containerRef = ref(null);
 const inputRef = ref(null);
 const listRef = ref(null);
+let _lastSelectAt = 0;
 
 const selected = computed(() => props.options.find(o => String(o.value) === String(props.modelValue)));
 
@@ -33,6 +34,12 @@ const filtered = computed(() => {
 
 function openDropdown() {
     if (props.disabled) return;
+    if (Date.now() - _lastSelectAt < 300) return;
+    if (open.value) {
+        open.value = false;
+        search.value = '';
+        return;
+    }
     open.value = true;
     search.value = '';
     highlighted.value = -1;
@@ -40,6 +47,7 @@ function openDropdown() {
 }
 
 function select(option) {
+    _lastSelectAt = Date.now();
     emit('update:modelValue', option.value);
     emit('change', option.value);
     open.value = false;
@@ -151,14 +159,14 @@ onUnmounted(() => document.removeEventListener('mousedown', handleClickOutside))
                 <!-- Options list -->
                 <ul ref="listRef" class="max-h-56 overflow-y-auto py-1 scrollbar-thin">
                     <li v-if="!required || !props.modelValue"
-                        @click="select({ value: '', label: placeholder })"
+                        @mousedown.prevent="select({ value: '', label: placeholder })"
                         class="px-3 py-2 text-sm text-slate-400 dark:text-slate-500 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 italic">
                         {{ placeholder }}
                     </li>
                     <li
                         v-for="(option, idx) in filtered"
                         :key="option.value"
-                        @click="select(option)"
+                        @mousedown.prevent="select(option)"
                         class="px-3 py-2 cursor-pointer select-none transition-colors"
                         :class="[
                             String(option.value) === String(modelValue)

@@ -1,6 +1,6 @@
-<script setup>
+﻿<script setup>
 import { Head, Link } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import StatCard from '@/Components/StatCard.vue';
 import StatusPill from '@/Components/StatusPill.vue';
@@ -12,7 +12,7 @@ defineProps({ stats: Object, schedule: Array });
 
 <template>
     <Head title="Doctor Dashboard" />
-    <PreclinicLayout title="Doctor Dashboard">
+    <SmartHealthLayout title="Doctor Dashboard">
         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
             <StatCard label="Today's appointments" :value="stats.today_appointments" :icon="CalendarDaysIcon" icon-bg="bg-brand-600" />
             <StatCard label="Upcoming" :value="stats.upcoming" :icon="ClockIcon" icon-bg="bg-sky-500" />
@@ -50,5 +50,5 @@ defineProps({ stats: Object, schedule: Array });
                 </div>
             </Card>
         </div>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

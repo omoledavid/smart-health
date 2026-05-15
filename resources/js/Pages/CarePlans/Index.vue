@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { computed, ref } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import StatusPill from '@/Components/StatusPill.vue';
 import SearchableSelect from '@/Components/SearchableSelect.vue';
@@ -40,7 +40,7 @@ const submit = () => form.post(route('care-plans.store'), { onSuccess: () => { f
 
 <template>
     <Head title="Care Plans" />
-    <PreclinicLayout title="Care Plans">
+    <SmartHealthLayout title="Care Plans">
         <template #actions>
             <button v-if="patients.length" @click="showForm = !showForm"
                 class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium">
@@ -124,5 +124,5 @@ const submit = () => form.post(route('care-plans.store'), { onSuccess: () => { f
                 </tbody>
             </table>
         </Card>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

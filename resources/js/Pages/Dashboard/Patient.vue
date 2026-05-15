@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { computed } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import StatCard from '@/Components/StatCard.vue';
 import StatusPill from '@/Components/StatusPill.vue';
@@ -15,7 +15,7 @@ const onboardingPct = computed(() => Math.min(100, ((props.patient?.onboarding_s
 
 <template>
     <Head title="My Health Dashboard" />
-    <PreclinicLayout :title="`Hello, ${patient?.full_name ?? 'Patient'}`">
+    <SmartHealthLayout :title="`Hello, ${patient?.full_name ?? 'Patient'}`">
         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
             <StatCard label="Upcoming" :value="stats.upcoming" :icon="ClockIcon" icon-bg="bg-brand-600" />
             <StatCard label="Past visits" :value="stats.past" :icon="CalendarDaysIcon" icon-bg="bg-sky-500" />
@@ -50,5 +50,5 @@ const onboardingPct = computed(() => Math.min(100, ((props.patient?.onboarding_s
                 <p class="text-xs text-slate-500 mt-2">{{ patient?.onboarding_step ?? 0 }} of 4 steps complete</p>
             </Card>
         </div>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

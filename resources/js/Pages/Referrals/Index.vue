@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { computed, ref } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import StatusPill from '@/Components/StatusPill.vue';
 import SearchableSelect from '@/Components/SearchableSelect.vue';
@@ -49,7 +49,7 @@ const updateStatus = (id, status) => useForm({ status }).patch(route('referrals.
 
 <template>
     <Head title="Referrals" />
-    <PreclinicLayout title="Patient Referrals">
+    <SmartHealthLayout title="Patient Referrals">
         <template #actions>
             <button @click="showForm = !showForm"
                 class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium">
@@ -148,5 +148,5 @@ const updateStatus = (id, status) => useForm({ status }).patch(route('referrals.
                 </tbody>
             </table>
         </Card>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

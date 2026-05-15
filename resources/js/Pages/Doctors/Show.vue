@@ -1,6 +1,6 @@
-<script setup>
+﻿<script setup>
 import { Head } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 
 defineProps({ doctor: Object });
@@ -9,7 +9,7 @@ const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 <template>
     <Head :title="doctor.user?.name" />
-    <PreclinicLayout :title="doctor.user?.name">
+    <SmartHealthLayout :title="doctor.user?.name">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
             <Card>
                 <div class="flex flex-col items-center text-center">
@@ -36,5 +36,5 @@ const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
                 </ul>
             </Card>
         </div>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

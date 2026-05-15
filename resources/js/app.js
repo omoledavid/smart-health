@@ -4,7 +4,7 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import VueApexCharts from 'vue3-apexcharts';
 
 createInertiaApp({
-    title: (title) => (title ? `${title} · Preclinic` : 'Preclinic'),
+    title: (title) => (title ? `${title} · SmartHealth` : 'SmartHealth'),
     resolve: (name) => {
         const pages = import.meta.glob('./Pages/**/*.vue', { eager: true });
         return pages[`./Pages/${name}.vue`];

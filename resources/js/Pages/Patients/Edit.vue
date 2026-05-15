@@ -5,16 +5,28 @@ import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import Input from '@/Components/Input.vue';
 
-const props = defineProps({ insuranceProviders: Array });
+const props = defineProps({ patient: Object, insuranceProviders: Array });
+
+const primaryInsurance = props.patient.insurances?.find(i => i.is_primary);
 
 const form = useForm({
-    first_name: '', last_name: '', email: '', phone: '',
-    dob: '', gender: '', blood_group: '',
-    address: '', city: '', state: '',
-    insurance_provider_id: '', insurance_plan_id: '',
-    policy_number: '', group_number: '',
+    first_name: props.patient.first_name || '',
+    last_name: props.patient.last_name || '',
+    email: props.patient.email || '',
+    phone: props.patient.phone || '',
+    dob: props.patient.dob ? props.patient.dob.slice(0, 10) : '',
+    gender: props.patient.gender || '',
+    blood_group: props.patient.blood_group || '',
+    address: props.patient.address || '',
+    city: props.patient.city || '',
+    state: props.patient.state || '',
+    insurance_provider_id: primaryInsurance?.insurance_provider_id || '',
+    insurance_plan_id: primaryInsurance?.insurance_plan_id || '',
+    policy_number: primaryInsurance?.policy_number || '',
+    group_number: primaryInsurance?.group_number || '',
 });
-const submit = () => form.post(route('patients.store'));
+
+const submit = () => form.put(route('patients.update', props.patient.id));
 
 const selectedProvider = computed(() =>
     props.insuranceProviders?.find(p => p.id == form.insurance_provider_id)
@@ -23,8 +35,11 @@ const plans = computed(() => selectedProvider.value?.plans || []);
 </script>
 
 <template>
-    <Head title="Add Patient" />
-    <SmartHealthLayout title="Add Patient" :breadcrumbs="[{ label: 'Patients', href: route('patients.index') }, { label: 'Add' }]">
+    <Head :title="`Edit ${patient.first_name} ${patient.last_name}`" />
+    <SmartHealthLayout
+        :title="`Edit ${patient.first_name} ${patient.last_name}`"
+        :breadcrumbs="[{ label: 'Patients', href: route('patients.index') }, { label: patient.first_name + ' ' + patient.last_name, href: route('patients.show', patient.id) }, { label: 'Edit' }]"
+    >
         <Card>
             <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input v-model="form.first_name" label="First name" :error="form.errors.first_name" />
@@ -68,9 +83,9 @@ const plans = computed(() => selectedProvider.value?.plans || []);
                 </div>
 
                 <div class="md:col-span-2 flex gap-2 justify-end pt-2">
-                    <Link :href="route('patients.index')" class="px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 text-sm">Cancel</Link>
+                    <Link :href="route('patients.show', patient.id)" class="px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 text-sm">Cancel</Link>
                     <button type="submit" :disabled="form.processing" class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium disabled:opacity-50">
-                        {{ form.processing ? 'Saving…' : 'Save Patient' }}
+                        {{ form.processing ? 'Saving…' : 'Update Patient' }}
                     </button>
                 </div>
             </form>

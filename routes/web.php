@@ -11,6 +11,8 @@ use App\Http\Controllers\GenerateSoapController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\CarePlanController;
 use App\Http\Controllers\InsuranceClaimController;
+use App\Http\Controllers\InsurancePlanController;
+use App\Http\Controllers\InsuranceProviderController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\WaitlistController;
@@ -42,7 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Patients — admin + doctor (role-scoped in controller)
-    Route::resource('patients', PatientController::class)->except(['edit', 'update']);
+    Route::resource('patients', PatientController::class);
 
     // Doctors — admin only (enforced loosely by UI/role; expand with policies as needed)
     Route::resource('doctors', DoctorController::class)->except(['edit', 'update']);
@@ -64,6 +66,14 @@ Route::middleware('auth')->group(function () {
     Route::post('invoices', [InvoiceController::class, 'store'])->name('invoices.store');
     Route::get('invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
     Route::post('invoices/{invoice}/payments', [InvoiceController::class, 'recordPayment'])->name('invoices.payments');
+
+    // Insurance providers & plans
+    Route::resource('insurance-providers', InsuranceProviderController::class)->except(['create', 'edit']);
+    Route::post('insurance-providers/{insurance_provider}/plans', [InsurancePlanController::class, 'store'])->name('insurance-plans.store');
+    Route::patch('insurance-plans/{plan}', [InsurancePlanController::class, 'update'])->name('insurance-plans.update');
+    Route::delete('insurance-plans/{plan}', [InsurancePlanController::class, 'destroy'])->name('insurance-plans.destroy');
+    Route::get('insurance-plans/{plan}/services', [InsurancePlanController::class, 'services'])->name('insurance-plans.services');
+    Route::post('insurance-plans/{plan}/services', [InsurancePlanController::class, 'syncServices'])->name('insurance-plans.sync-services');
 
     // Insurance claims
     Route::get('claims', [InsuranceClaimController::class, 'index'])->name('claims.index');

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\Consultation;
 use App\Models\Doctor;
+use App\Models\InsuranceClaim;
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use App\Models\Location;
 use App\Models\Patient;
 use App\Models\Service;
@@ -100,6 +103,9 @@ class AppointmentController extends Controller
 
         $appointment = Appointment::create($data + ['status' => Appointment::STATUS_SCHEDULED]);
 
+        // Auto-generate invoice + insurance claim at booking time
+        $this->autoCreateClaim($appointment);
+
         return redirect()->route('appointments.show', $appointment);
     }
 
@@ -136,7 +142,75 @@ class AppointmentController extends Controller
         ]);
         $appointment->update(['status' => $data['status']]);
 
+        // Auto-create insurance claim when completed
+        if ($data['status'] === 'completed') {
+            $this->autoCreateClaim($appointment);
+        }
+
         return back();
+    }
+
+    private function autoCreateClaim(Appointment $appointment): void
+    {
+        $appointment->loadMissing(['patient.insurances.insurancePlan', 'service']);
+
+        if (! $appointment->service_id || ! $appointment->patient) {
+            return;
+        }
+
+        // Find active insurance with a plan
+        $insurance = $appointment->patient->insurances
+            ->filter(fn ($ins) => $ins->is_primary && $ins->insurance_plan_id)
+            ->first();
+
+        if (! $insurance || ! $insurance->insurancePlan) {
+            return;
+        }
+
+        $plan = $insurance->insurancePlan;
+        $service = $appointment->service;
+        $claimedCents = $plan->priceForService($service->id, $service->price_cents);
+
+        // Create invoice if not linked
+        $invoice = Invoice::where('appointment_id', $appointment->id)->first();
+        if (! $invoice) {
+            $number = 'INV-' . now()->format('Ymd') . '-' . str_pad(Invoice::count() + 1, 4, '0', STR_PAD_LEFT);
+            $invoice = Invoice::create([
+                'number' => $number,
+                'patient_id' => $appointment->patient_id,
+                'appointment_id' => $appointment->id,
+                'issued_on' => now()->toDateString(),
+                'subtotal_cents' => $service->price_cents,
+                'total_cents' => $service->price_cents,
+                'status' => 'draft',
+            ]);
+            InvoiceItem::create([
+                'invoice_id' => $invoice->id,
+                'service_id' => $service->id,
+                'description' => $service->name,
+                'quantity' => 1,
+                'unit_price_cents' => $service->price_cents,
+                'total_cents' => $service->price_cents,
+            ]);
+        }
+
+        // Check if claim already exists for this invoice + insurance
+        $exists = InsuranceClaim::where('invoice_id', $invoice->id)
+            ->where('patient_insurance_id', $insurance->id)
+            ->exists();
+
+        if ($exists) {
+            return;
+        }
+
+        InsuranceClaim::create([
+            'invoice_id' => $invoice->id,
+            'patient_insurance_id' => $insurance->id,
+            'claim_number' => 'CLM-' . now()->format('Ymd') . '-' . str_pad(InsuranceClaim::count() + 1, 4, '0', STR_PAD_LEFT),
+            'claimed_cents' => $claimedCents,
+            'submitted_on' => now()->toDateString(),
+            'status' => 'submitted',
+        ]);
     }
 
     public function destroy(Appointment $appointment)

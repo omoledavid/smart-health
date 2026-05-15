@@ -1,6 +1,6 @@
-<script setup>
+﻿<script setup>
 import { Head, Link } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import StatCard from '@/Components/StatCard.vue';
 import { PlusIcon, UserGroupIcon, AcademicCapIcon, ClockIcon, MapPinIcon } from '@heroicons/vue/24/outline';
@@ -10,7 +10,7 @@ defineProps({ doctors: Object, stats: Object });
 
 <template>
     <Head title="Doctors" />
-    <PreclinicLayout title="Doctors">
+    <SmartHealthLayout title="Doctors">
         <template #actions>
             <Link :href="route('doctors.create')" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium">
                 <PlusIcon class="h-4 w-4" /> Add Doctor
@@ -39,5 +39,5 @@ defineProps({ doctors: Object, stats: Object });
             </Card>
             <p v-if="!doctors.data.length" class="text-sm text-slate-500 col-span-full text-center py-10">No doctors yet.</p>
         </div>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

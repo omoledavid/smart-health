@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { computed, watch } from 'vue';
 import { Head, useForm, Link } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import SearchableSelect from '@/Components/SearchableSelect.vue';
 
@@ -44,7 +44,7 @@ const submit = () => form.post(route('appointments.store'));
 
 <template>
     <Head title="New Appointment" />
-    <PreclinicLayout title="New Appointment" :breadcrumbs="[{ label: 'Appointments', href: route('appointments.index') }, { label: 'New' }]">
+    <SmartHealthLayout title="New Appointment" :breadcrumbs="[{ label: 'Appointments', href: route('appointments.index') }, { label: 'New' }]">
         <Card>
             <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <label class="block">
@@ -119,5 +119,5 @@ const submit = () => form.post(route('appointments.store'));
                 </div>
             </form>
         </Card>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

@@ -14,7 +14,7 @@ const submit = () => form.post(route('register'));
                 <div class="grid h-14 w-14 place-items-center rounded-2xl bg-white/20 backdrop-blur mb-8">
                     <SparklesIcon class="h-7 w-7" />
                 </div>
-                <h2 class="text-4xl font-bold mb-4">Join Preclinic</h2>
+                <h2 class="text-4xl font-bold mb-4">Join SmartHealth</h2>
                 <p class="text-brand-100 text-lg">Create your patient portal account to book appointments and manage your care.</p>
             </div>
         </div>

@@ -1,19 +1,23 @@
-<script setup>
-import { ref } from 'vue';
-import { Head, Link } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+﻿<script setup>
+import { ref, computed } from 'vue';
+import { Head, Link, usePage } from '@inertiajs/vue3';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import StatusPill from '@/Components/StatusPill.vue';
 import dayjs from 'dayjs';
+import { PencilSquareIcon } from '@heroicons/vue/24/outline';
 
 const props = defineProps({ patient: Object });
 const tab = ref('overview');
 const tabs = ['overview', 'insurance', 'appointments', 'notes'];
+
+const user = computed(() => usePage().props.auth?.user);
+const isAdmin = computed(() => user.value?.role === 'admin');
 </script>
 
 <template>
     <Head :title="patient.full_name" />
-    <PreclinicLayout :title="patient.first_name + ' ' + patient.last_name" :breadcrumbs="[{ label: 'Patients', href: route('patients.index') }, { label: patient.first_name + ' ' + patient.last_name }]">
+    <SmartHealthLayout :title="patient.first_name + ' ' + patient.last_name" :breadcrumbs="[{ label: 'Patients', href: route('patients.index') }, { label: patient.first_name + ' ' + patient.last_name }]">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
             <Card>
                 <div class="flex flex-col items-center text-center pb-4">
@@ -29,6 +33,9 @@ const tabs = ['overview', 'insurance', 'appointments', 'notes'];
                     <div class="flex justify-between"><dt class="text-slate-500">Email</dt><dd class="text-slate-700 dark:text-slate-200 break-all">{{ patient.email }}</dd></div>
                     <div class="flex justify-between"><dt class="text-slate-500">Address</dt><dd class="text-slate-700 dark:text-slate-200 text-right">{{ patient.address }}, {{ patient.city }}</dd></div>
                 </dl>
+                <Link v-if="isAdmin" :href="route('patients.edit', patient.id)" class="mt-4 w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-medium">
+                    <PencilSquareIcon class="h-4 w-4" /> Edit Patient
+                </Link>
             </Card>
 
             <div class="lg:col-span-2">
@@ -97,5 +104,5 @@ const tabs = ['overview', 'insurance', 'appointments', 'notes'];
                 </Card>
             </div>
         </div>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

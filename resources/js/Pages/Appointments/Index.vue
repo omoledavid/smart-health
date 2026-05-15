@@ -1,6 +1,6 @@
-<script setup>
+﻿<script setup>
 import { Head, Link, router } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import StatusPill from '@/Components/StatusPill.vue';
 import dayjs from 'dayjs';
@@ -13,7 +13,7 @@ const setStatus = (s) => router.get(route('appointments.index'), { status: s }, 
 
 <template>
     <Head title="Appointments" />
-    <PreclinicLayout title="Appointments">
+    <SmartHealthLayout title="Appointments">
         <template #actions>
             <Link :href="route('appointments.calendar')" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-medium">
                 <CalendarIcon class="h-4 w-4" /> Calendar
@@ -58,5 +58,5 @@ const setStatus = (s) => router.get(route('appointments.index'), { status: s }, 
                 </table>
             </div>
         </Card>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { ref } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import StatusPill from '@/Components/StatusPill.vue';
 import { PlusIcon } from '@heroicons/vue/24/outline';
@@ -16,7 +16,7 @@ const submit = () => form.post(route('consultations.store'), { onSuccess: () => 
 
 <template>
     <Head title="Consultations" />
-    <PreclinicLayout title="Consultations">
+    <SmartHealthLayout title="Consultations">
         <template #actions>
             <button @click="showForm = !showForm" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium">
                 <PlusIcon class="h-4 w-4" /> {{ showForm ? 'Cancel' : 'New consultation' }}
@@ -60,5 +60,5 @@ const submit = () => form.post(route('consultations.store'), { onSuccess: () => 
                 </tbody>
             </table>
         </Card>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

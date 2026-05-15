@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { computed } from 'vue';
 import { Head } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import VueApexCharts from 'vue3-apexcharts';
 
@@ -89,7 +89,7 @@ const growthSeries = computed(() => [{ name: 'New Patients', data: props.patient
 
 <template>
     <Head title="Analytics" />
-    <PreclinicLayout title="Analytics & Reports">
+    <SmartHealthLayout title="Analytics & Reports">
         <!-- Summary cards -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div class="rounded-2xl bg-white dark:bg-slate-900 p-5 ring-1 ring-slate-200 dark:ring-slate-800">
@@ -156,5 +156,5 @@ const growthSeries = computed(() => [{ name: 'New Patients', data: props.patient
                 <p v-else class="text-sm text-slate-500 text-center py-8">No service data yet.</p>
             </Card>
         </div>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>

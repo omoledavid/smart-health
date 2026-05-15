@@ -55,7 +55,7 @@ const completed = computed(() => step.value > 3);
                 <span class="grid h-10 w-10 place-items-center rounded-xl bg-brand-600 text-white">
                     <SparklesIcon class="h-5 w-5" />
                 </span>
-                <span class="text-xl font-semibold text-slate-900 dark:text-white">Preclinic Onboarding</span>
+                <span class="text-xl font-semibold text-slate-900 dark:text-white">SmartHealth Onboarding</span>
             </div>
 
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
@@ -122,7 +122,7 @@ const completed = computed(() => step.value > 3);
                     <div v-if="step === 3" class="space-y-3">
                         <p class="text-sm text-slate-600 dark:text-slate-400">Please review the consent for treatment and HIPAA privacy practices, then check the box below.</p>
                         <div class="rounded-lg bg-slate-50 dark:bg-slate-800 p-4 text-xs text-slate-600 dark:text-slate-400 max-h-48 overflow-y-auto">
-                            I consent to the medical treatment provided by Preclinic. I understand my health information will be used and disclosed in accordance with HIPAA. I acknowledge the privacy notice provided to me.
+                            I consent to the medical treatment provided by SmartHealth. I understand my health information will be used and disclosed in accordance with HIPAA. I acknowledge the privacy notice provided to me.
                         </div>
                         <label class="flex items-center gap-2"><input v-model="form.consent" type="checkbox" class="rounded" /> <span class="text-sm">I have read and agree to the consent and privacy practices.</span></label>
                     </div>

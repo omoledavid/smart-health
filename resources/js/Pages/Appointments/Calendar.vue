@@ -1,7 +1,7 @@
-<script setup>
+﻿<script setup>
 import { computed, ref } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
-import PreclinicLayout from '@/Layouts/PreclinicLayout.vue';
+import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
 import Card from '@/Components/Card.vue';
 import dayjs from 'dayjs';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
@@ -40,7 +40,7 @@ const colorFor = (status) => ({
 
 <template>
     <Head title="Calendar" />
-    <PreclinicLayout title="Calendar">
+    <SmartHealthLayout title="Calendar">
         <Card padding="p-0">
             <div class="flex items-center justify-between px-5 py-3 border-b border-slate-200 dark:border-slate-800">
                 <div class="flex items-center gap-2">
@@ -67,5 +67,5 @@ const colorFor = (status) => ({
                 </div>
             </div>
         </Card>
-    </PreclinicLayout>
+    </SmartHealthLayout>
 </template>
