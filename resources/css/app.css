@@ -1,0 +1,46 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+@source '../**/*.vue';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-brand-50: #eef0ff;
+    --color-brand-100: #dde0ff;
+    --color-brand-200: #b9bfff;
+    --color-brand-300: #8e98ff;
+    --color-brand-400: #5e6cf5;
+    --color-brand-500: #3d49db;
+    --color-brand-600: #2e37a4;
+    --color-brand-700: #262d83;
+    --color-brand-800: #1e2469;
+    --color-brand-900: #181d54;
+
+    --color-success: #1abe17;
+    --color-warning: #ffbc34;
+    --color-danger: #e70d0d;
+    --color-info: #1e88e5;
+}
+
+html, body {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Custom scrollbar utility */
+.scrollbar-thin::-webkit-scrollbar { width: 5px; height: 5px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; border-radius: 9999px; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: #b9bfff33; border-radius: 9999px; transition: background 0.2s; }
+.scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #b9bfff66; }
+.dark .scrollbar-thin::-webkit-scrollbar-thumb { background: #5e6cf540; }
+.dark .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #5e6cf580; }
+
+/* Firefox scrollbar */
+.scrollbar-thin { scrollbar-width: thin; scrollbar-color: #b9bfff33 transparent; }
+.dark .scrollbar-thin { scrollbar-color: #5e6cf540 transparent; }
