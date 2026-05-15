@@ -51,6 +51,8 @@ Route::middleware('auth')->group(function () {
 
     // Appointments — all roles, scoped in controller
     Route::get('appointments/calendar', [AppointmentController::class, 'calendar'])->name('appointments.calendar');
+    Route::get('appointments/book', [AppointmentController::class, 'book'])->name('appointments.book');
+    Route::post('appointments/book', [AppointmentController::class, 'storeBooking'])->name('appointments.storeBooking');
     Route::resource('appointments', AppointmentController::class)->except(['edit', 'update']);
     Route::patch('appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.status');
     Route::post('appointments/{appointment}/start-consultation', [AppointmentController::class, 'startConsultation'])->name('appointments.start-consultation');
@@ -108,6 +110,10 @@ Route::middleware('auth')->group(function () {
 
     // Analytics (admin only)
     Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
+
+    // Notifications
+    Route::post('notifications/mark-read', fn (\Illuminate\Http\Request $r) => $r->user()->unreadNotifications()->whereIn('id', $r->input('ids', []))->update(['read_at' => now()]))->name('notifications.markRead');
+    Route::post('notifications/mark-all-read', fn (\Illuminate\Http\Request $r) => $r->user()->unreadNotifications()->update(['read_at' => now()]))->name('notifications.markAllRead');
 
     // Consultations (existing, preserved)
     Route::resource('consultations', ConsultationController::class)->only(['index', 'store', 'show', 'update']);

@@ -11,6 +11,8 @@ use App\Models\InvoiceItem;
 use App\Models\Location;
 use App\Models\Patient;
 use App\Models\Service;
+use App\Models\User;
+use App\Notifications\AppointmentBookedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -105,6 +107,9 @@ class AppointmentController extends Controller
 
         // Auto-generate invoice + insurance claim at booking time
         $this->autoCreateClaim($appointment);
+
+        // Notify the assigned doctor and all admins
+        $this->notifyBooking($appointment);
 
         return redirect()->route('appointments.show', $appointment);
     }
@@ -211,6 +216,74 @@ class AppointmentController extends Controller
             'submitted_on' => now()->toDateString(),
             'status' => 'submitted',
         ]);
+    }
+
+    public function book(Request $request): Response
+    {
+        $user = $request->user();
+        $patient = $user->patient;
+
+        return Inertia::render('Appointments/Book', [
+            'patient'   => $patient ? ['id' => $patient->id, 'name' => $patient->full_name] : null,
+            'doctors'   => Doctor::with('user:id,name')->get()->map(fn ($d) => [
+                'id'   => $d->id,
+                'name' => $d->user?->name,
+            ]),
+            'locations' => Location::orderBy('name')->get(['id', 'name']),
+            'services'  => Service::orderBy('name')->get(['id', 'name', 'duration_minutes', 'price_cents']),
+        ]);
+    }
+
+    public function storeBooking(Request $request)
+    {
+        $user = $request->user();
+        $patient = $user->patient;
+
+        if (!$patient) {
+            return back()->with('error', 'No patient profile linked to your account.');
+        }
+
+        $data = $request->validate([
+            'doctor_id'        => ['required', 'exists:doctors,id'],
+            'location_id'      => ['nullable', 'exists:locations,id'],
+            'service_id'       => ['nullable', 'exists:services,id'],
+            'scheduled_at'     => ['required', 'date', 'after:now'],
+            'duration_minutes' => ['required', 'integer', 'min:5', 'max:480'],
+            'visit_type'       => ['required', 'in:in_person,telehealth'],
+            'reason'           => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $start = new \DateTimeImmutable($data['scheduled_at']);
+        if (Appointment::conflictsWith((int) $data['doctor_id'], $start, (int) $data['duration_minutes'])->exists()) {
+            throw ValidationException::withMessages([
+                'scheduled_at' => 'This time slot is already booked for the selected doctor.',
+            ]);
+        }
+
+        $appointment = Appointment::create($data + [
+            'patient_id' => $patient->id,
+            'status'     => Appointment::STATUS_SCHEDULED,
+        ]);
+
+        $this->notifyBooking($appointment);
+
+        return redirect()->route('appointments.show', $appointment)
+            ->with('success', 'Your appointment has been booked successfully.');
+    }
+
+    private function notifyBooking(Appointment $appointment): void
+    {
+        $appointment->loadMissing(['patient', 'doctor.user']);
+
+        $notification = new AppointmentBookedNotification($appointment);
+
+        // Notify the assigned doctor
+        if ($doctorUser = $appointment->doctor?->user) {
+            $doctorUser->notify($notification);
+        }
+
+        // Notify all admins
+        User::where('role', User::ROLE_ADMIN)->each(fn ($admin) => $admin->notify($notification));
     }
 
     public function destroy(Appointment $appointment)

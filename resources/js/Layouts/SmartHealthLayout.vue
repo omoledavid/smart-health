@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
-import { useDark, useToggle } from '@vueuse/core';
+import { useDark, useToggle, onClickOutside } from '@vueuse/core';
 import {
     HomeIcon, UserGroupIcon, UsersIcon, CalendarDaysIcon, MapPinIcon,
     BriefcaseIcon, AcademicCapIcon, DocumentTextIcon, BanknotesIcon,
@@ -9,7 +9,7 @@ import {
     SunIcon, MoonIcon, ChevronDownIcon, Bars3Icon, XMarkIcon, SparklesIcon,
     ArrowLeftStartOnRectangleIcon, ShieldCheckIcon, ChartBarIcon,
     ClipboardDocumentListIcon, QueueListIcon, ArrowTopRightOnSquareIcon,
-    BuildingOffice2Icon,
+    BuildingOffice2Icon, PlusCircleIcon, CheckCircleIcon,
 } from '@heroicons/vue/24/outline';
 
 defineProps({
@@ -19,8 +19,10 @@ defineProps({
 });
 
 const page = usePage();
-const user = computed(() => page.props.auth?.user);
-const role = computed(() => user.value?.role);
+const user        = computed(() => page.props.auth?.user);
+const role        = computed(() => user.value?.role);
+const unreadMsgs  = computed(() => page.props.unread_messages ?? 0);
+const notifications = computed(() => page.props.notifications ?? []);
 
 const isDark = useDark({
     storageKey: 'smart-scribe-theme',
@@ -29,8 +31,21 @@ const isDark = useDark({
 });
 const toggleDark = useToggle(isDark);
 
-const sidebarOpen = ref(false);
-const profileOpen = ref(false);
+const sidebarOpen   = ref(false);
+const profileOpen   = ref(false);
+const bellOpen      = ref(false);
+const bellRef       = ref(null);
+onClickOutside(bellRef, () => { bellOpen.value = false; });
+
+function markAllRead() {
+    router.post(route('notifications.markAllRead'), {}, { preserveScroll: true });
+    bellOpen.value = false;
+}
+
+function openNotification(url) {
+    bellOpen.value = false;
+    if (url) router.visit(url);
+}
 
 const navGroups = computed(() => {
     const groups = [
@@ -59,9 +74,19 @@ const navGroups = computed(() => {
         });
     }
 
+    if (role.value === 'patient') {
+        groups.push({
+            title: 'My Care',
+            items: [
+                { name: 'My Appointments', href: route('appointments.index'), icon: CalendarDaysIcon, route: 'appointments.*' },
+                { name: 'Book Appointment', href: route('appointments.book'), icon: PlusCircleIcon, route: 'appointments.book' },
+            ],
+        });
+    }
+
     const opsItems = [
         { name: 'Billing', href: route('invoices.index'), icon: BanknotesIcon, route: 'invoices.*' },
-        { name: 'Messages', href: route('messages.index'), icon: ChatBubbleLeftRightIcon, route: 'messages.*' },
+        { name: 'Messages', href: route('messages.index'), icon: ChatBubbleLeftRightIcon, route: 'messages.*', badge: unreadMsgs.value || null },
     ];
     if (role.value === 'admin' || role.value === 'doctor') {
         opsItems.push({ name: 'Insurance Providers', href: route('insurance-providers.index'), icon: BuildingOffice2Icon, route: 'insurance-providers.*' });
@@ -135,8 +160,13 @@ const logout = () => router.post(route('logout'));
                                     ? 'bg-brand-600 text-white shadow-sm shadow-brand-600/30'
                                     : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'"
                             >
-                                <component :is="item.icon" class="h-5 w-5" />
-                                <span>{{ item.name }}</span>
+                                <component :is="item.icon" class="h-5 w-5 shrink-0" />
+                                <span class="flex-1">{{ item.name }}</span>
+                                <span
+                                    v-if="item.badge"
+                                    class="ml-auto min-w-[1.25rem] h-5 px-1 rounded-full text-xs font-bold flex items-center justify-center"
+                                    :class="isActive(item.route) ? 'bg-white text-brand-600' : 'bg-brand-600 text-white'"
+                                >{{ item.badge }}</span>
                             </Link>
                         </li>
                     </ul>
@@ -172,10 +202,60 @@ const logout = () => router.post(route('logout'));
                             <SunIcon v-if="isDark" class="h-5 w-5" />
                             <MoonIcon v-else class="h-5 w-5" />
                         </button>
-                        <button class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 relative">
-                            <BellIcon class="h-5 w-5" />
-                            <span class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-danger"></span>
-                        </button>
+                        <!-- Notifications bell -->
+                        <div ref="bellRef" class="relative">
+                            <button
+                                @click="bellOpen = !bellOpen"
+                                class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 relative"
+                            >
+                                <BellIcon class="h-5 w-5" />
+                                <span
+                                    v-if="notifications.length"
+                                    class="absolute top-1 right-1 min-w-[1rem] h-4 px-0.5 rounded-full bg-danger text-white text-[10px] font-bold flex items-center justify-center"
+                                >{{ notifications.length > 9 ? '9+' : notifications.length }}</span>
+                            </button>
+
+                            <Transition
+                                enter-active-class="transition duration-100 ease-out"
+                                enter-from-class="scale-95 opacity-0"
+                                enter-to-class="scale-100 opacity-100"
+                                leave-active-class="transition duration-75 ease-in"
+                                leave-from-class="scale-100 opacity-100"
+                                leave-to-class="scale-95 opacity-0"
+                            >
+                                <div
+                                    v-if="bellOpen"
+                                    class="absolute right-0 mt-2 w-80 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-xl z-50 overflow-hidden"
+                                >
+                                    <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800">
+                                        <p class="text-sm font-semibold text-slate-900 dark:text-white">Notifications</p>
+                                        <button
+                                            v-if="notifications.length"
+                                            @click="markAllRead"
+                                            class="text-xs text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1"
+                                        >
+                                            <CheckCircleIcon class="h-3.5 w-3.5" /> Mark all read
+                                        </button>
+                                    </div>
+
+                                    <ul class="max-h-80 overflow-y-auto scrollbar-thin divide-y divide-slate-100 dark:divide-slate-800">
+                                        <li v-if="!notifications.length" class="px-4 py-6 text-center text-sm text-slate-400">
+                                            No new notifications
+                                        </li>
+                                        <li
+                                            v-for="n in notifications"
+                                            :key="n.id"
+                                            @click="openNotification(n.url)"
+                                            class="px-4 py-3 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                                        >
+                                            <p class="text-sm font-medium text-slate-900 dark:text-white leading-snug">{{ n.title }}</p>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-2">{{ n.body }}</p>
+                                            <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">{{ n.created_at }}</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </Transition>
+                        </div>
                         <div class="relative">
                             <button class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" @click="profileOpen = !profileOpen">
                                 <span class="grid h-8 w-8 place-items-center rounded-full bg-brand-600 text-white text-sm font-semibold">

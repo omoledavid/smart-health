@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use App\Models\MessageThread;
+use App\Notifications\NewMessageNotification;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -104,11 +105,14 @@ class MessageController extends Controller
             'last_message_at' => now(),
         ]);
 
-        Message::create([
+        $message = Message::create([
             'thread_id' => $thread->id,
             'sender_id' => $request->user()->id,
             'body' => $data['body'],
         ]);
+
+        $message->load('sender');
+        $this->notifyRecipient($request->user()->id, $thread, $message);
 
         return redirect()->route('messages.show', $thread);
     }
@@ -117,13 +121,33 @@ class MessageController extends Controller
     {
         $data = $request->validate(['body' => ['required', 'string']]);
 
-        Message::create([
+        $message = Message::create([
             'thread_id' => $thread->id,
             'sender_id' => $request->user()->id,
             'body' => $data['body'],
         ]);
         $thread->update(['last_message_at' => now()]);
 
+        $message->load('sender');
+        $this->notifyRecipient($request->user()->id, $thread, $message);
+
         return back();
+    }
+
+    private function notifyRecipient(int $senderId, MessageThread $thread, Message $message): void
+    {
+        $thread->loadMissing(['patient.user', 'doctor.user']);
+        $notification = new NewMessageNotification($message, $thread);
+
+        // Notify the other party in the thread
+        $patientUser = $thread->patient?->user;
+        $doctorUser  = $thread->doctor?->user;
+
+        if ($patientUser && $patientUser->id !== $senderId) {
+            $patientUser->notify($notification);
+        }
+        if ($doctorUser && $doctorUser->id !== $senderId) {
+            $doctorUser->notify($notification);
+        }
     }
 }

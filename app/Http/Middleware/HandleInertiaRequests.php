@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Message;
+use App\Models\MessageThread;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -53,6 +55,38 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
             ],
+            'unread_messages' => function () use ($user) {
+                if (!$user) return 0;
+
+                $threadQuery = MessageThread::query();
+                if ($user->isPatient()) {
+                    $threadQuery->where('patient_id', optional($user->patient)->id);
+                } elseif ($user->isDoctor()) {
+                    $threadQuery->where('doctor_id', optional($user->doctor)->id);
+                }
+
+                return Message::whereIn('thread_id', $threadQuery->pluck('id'))
+                    ->where('sender_id', '!=', $user->id)
+                    ->whereNull('read_at')
+                    ->count();
+            },
+            'notifications' => function () use ($user) {
+                if (!$user) return [];
+
+                return $user->unreadNotifications()
+                    ->latest()
+                    ->limit(10)
+                    ->get()
+                    ->map(fn ($n) => [
+                        'id'         => $n->id,
+                        'type'       => $n->data['type'] ?? 'info',
+                        'title'      => $n->data['title'] ?? '',
+                        'body'       => $n->data['body'] ?? '',
+                        'url'        => $n->data['url'] ?? null,
+                        'created_at' => $n->created_at->diffForHumans(),
+                    ])
+                    ->all();
+            },
         ];
     }
 }
