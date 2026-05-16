@@ -1,4 +1,4 @@
-﻿<script setup>
+<script setup>
 import { computed, ref } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
@@ -43,11 +43,12 @@ const submit = () => form.post(route('care-plans.store'), { onSuccess: () => { f
     <SmartHealthLayout title="Care Plans">
         <template #actions>
             <button v-if="patients.length" @click="showForm = !showForm"
-                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium">
-                <PlusIcon class="h-4 w-4" /> New Care Plan
+                class="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-medium whitespace-nowrap">
+                <PlusIcon class="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" /> New Care Plan
             </button>
         </template>
 
+        <!-- Create form -->
         <Card v-if="showForm" title="New Care Plan" class="mb-5">
             <form @submit.prevent="submit" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <label class="block">
@@ -93,7 +94,37 @@ const submit = () => form.post(route('care-plans.store'), { onSuccess: () => { f
             </form>
         </Card>
 
-        <Card padding="p-0">
+        <!-- Mobile card list -->
+        <div class="sm:hidden space-y-3">
+            <div v-for="p in plans.data" :key="p.id"
+                class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+                <div class="flex items-start justify-between gap-2">
+                    <p class="font-semibold text-slate-900 dark:text-white leading-snug">{{ p.title }}</p>
+                    <StatusPill :status="p.status" class="shrink-0" />
+                </div>
+                <div class="mt-2 space-y-1 text-sm text-slate-600 dark:text-slate-400">
+                    <p><span class="text-xs text-slate-400">Patient:</span> {{ p.patient }}</p>
+                    <p v-if="p.doctor"><span class="text-xs text-slate-400">Doctor:</span> {{ p.doctor }}</p>
+                    <div class="grid grid-cols-2 gap-2 mt-1">
+                        <div>
+                            <p class="text-xs text-slate-400">Tasks</p>
+                            <p class="font-medium text-slate-900 dark:text-white">{{ p.tasks_count }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400">Review date</p>
+                            <p>{{ p.review_date ?? '—' }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 text-right">
+                    <Link :href="route('care-plans.show', p.id)" class="text-brand-600 hover:underline text-sm font-medium">View →</Link>
+                </div>
+            </div>
+            <p v-if="!plans.data.length" class="text-center text-slate-500 text-sm py-12">No care plans yet.</p>
+        </div>
+
+        <!-- Desktop table -->
+        <Card padding="p-0" class="hidden sm:block">
             <table class="w-full text-sm">
                 <thead class="text-left text-xs uppercase tracking-wider text-slate-400 bg-slate-50 dark:bg-slate-800/50">
                     <tr>

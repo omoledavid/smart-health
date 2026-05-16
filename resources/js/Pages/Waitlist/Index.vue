@@ -1,4 +1,4 @@
-﻿<script setup>
+<script setup>
 import { computed, ref } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import SmartHealthLayout from '@/Layouts/SmartHealthLayout.vue';
@@ -61,11 +61,12 @@ const cancelEntry = (id) => {
     <SmartHealthLayout title="Patient Waitlist">
         <template #actions>
             <button @click="showForm = !showForm"
-                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium">
-                <PlusIcon class="h-4 w-4" /> Add to Waitlist
+                class="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-medium whitespace-nowrap">
+                <PlusIcon class="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" /> Add to Waitlist
             </button>
         </template>
 
+        <!-- Add form -->
         <Card v-if="showForm" title="Add Patient to Waitlist" class="mb-5">
             <form @submit.prevent="submit" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <label class="block">
@@ -116,7 +117,40 @@ const cancelEntry = (id) => {
             </form>
         </Card>
 
-        <Card padding="p-0">
+        <!-- Mobile card list -->
+        <div class="sm:hidden space-y-3">
+            <div v-for="e in entries" :key="e.id"
+                class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+                <div class="flex items-start justify-between gap-2">
+                    <p class="font-semibold text-slate-900 dark:text-white">{{ e.patient }}</p>
+                    <span class="px-2 py-0.5 rounded-full text-xs font-medium capitalize shrink-0" :class="priorityColors[e.priority]">
+                        {{ e.priority }}
+                    </span>
+                </div>
+                <div class="mt-2 space-y-1 text-sm text-slate-600 dark:text-slate-400">
+                    <p v-if="e.doctor"><span class="text-xs text-slate-400">Doctor:</span> {{ e.doctor }}</p>
+                    <p v-if="e.service"><span class="text-xs text-slate-400">Service:</span> {{ e.service }}</p>
+                    <div class="grid grid-cols-2 gap-2 mt-1">
+                        <div>
+                            <p class="text-xs text-slate-400">Requested</p>
+                            <p>{{ e.requested_on ?? '—' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400">Available from</p>
+                            <p>{{ e.available_from ?? '—' }}</p>
+                        </div>
+                    </div>
+                    <p v-if="e.notes" class="text-xs text-slate-500 mt-1 line-clamp-2">{{ e.notes }}</p>
+                </div>
+                <div class="mt-3 text-right">
+                    <button @click="cancelEntry(e.id)" class="text-xs text-red-500 hover:underline font-medium">Cancel entry</button>
+                </div>
+            </div>
+            <p v-if="!entries.length" class="text-center text-slate-500 text-sm py-12">Waitlist is empty.</p>
+        </div>
+
+        <!-- Desktop table -->
+        <Card padding="p-0" class="hidden sm:block">
             <table class="w-full text-sm">
                 <thead class="text-left text-xs uppercase tracking-wider text-slate-400 bg-slate-50 dark:bg-slate-800/50">
                     <tr>
