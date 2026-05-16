@@ -1,9 +1,12 @@
 <?php
 
 use App\Models\Consultation;
+use App\Models\User;
 use App\Services\ClinicalScribeService;
 
 beforeEach(function () {
+    $this->actingAs(User::factory()->create(['role' => User::ROLE_ADMIN]));
+
     $this->soap = [
         'subjective' => [
             'chief_complaint' => 'Shortness of breath',
