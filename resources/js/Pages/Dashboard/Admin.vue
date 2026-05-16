@@ -48,23 +48,23 @@ const inMonth = (d) => d.isSame(calRef.value, 'month');
     <Head title="Admin Dashboard" />
     <SmartHealthLayout title="Admin Dashboard">
         <template #actions>
-            <Link :href="route('appointments.create')" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium">
-                <PlusIcon class="h-4 w-4" /> New Appointment
+            <Link :href="route('appointments.create')" class="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-medium whitespace-nowrap">
+                <PlusIcon class="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" /> New Appointment
             </Link>
-            <Link :href="route('doctors.index')" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-sm font-medium">
-                <ClockIcon class="h-4 w-4" /> Schedule Availability
+            <Link :href="route('doctors.index')" class="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs sm:text-sm font-medium whitespace-nowrap">
+                <ClockIcon class="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" /> Schedule Availability
             </Link>
         </template>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard label="Doctors" :value="stats.doctors" delta="+95%" :icon="UserGroupIcon" icon-bg="bg-brand-600" :spark="[3,8,5,9,6,10,12]" spark-color="#2e37a4" />
             <StatCard label="Patients" :value="stats.patients" delta="+25%" :icon="UsersIcon" icon-bg="bg-red-500" :spark="[5,7,6,9,8,11,10]" spark-color="#ef4444" />
             <StatCard label="Appointments" :value="stats.appointments" delta="-15%" :delta-positive="false" :icon="CalendarDaysIcon" icon-bg="bg-sky-500" :spark="[10,8,6,4,7,5,3]" spark-color="#0ea5e9" />
             <StatCard label="Revenue" :value="fmtMoney(stats.revenue_cents)" delta="+25%" :icon="BanknotesIcon" icon-bg="bg-emerald-500" :spark="[2,4,3,6,5,8,9]" spark-color="#10b981" />
         </div>
 
-        <div class="mt-6 grid grid-cols-1 xl:grid-cols-3 gap-5">
-            <div class="xl:col-span-2 space-y-5">
+        <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <div class="lg:col-span-2 space-y-5">
                 <Card title="Appointment Statistics">
                     <template #actions>
                         <select class="text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5">
@@ -73,29 +73,32 @@ const inMonth = (d) => d.isSame(calRef.value, 'month');
                         </select>
                     </template>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-                        <div class="rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-3">
-                            <p class="text-xs text-slate-500">All Appointments</p>
-                            <p class="text-xl font-bold text-slate-900 dark:text-white">{{ apptCounts.all }}</p>
+                        <div class="rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2.5">
+                            <p class="text-xs text-slate-500">All</p>
+                            <p class="text-lg font-bold text-slate-900 dark:text-white">{{ apptCounts.all }}</p>
                         </div>
-                        <div class="rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-3">
+                        <div class="rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2.5">
                             <p class="text-xs text-slate-500">Cancelled</p>
-                            <p class="text-xl font-bold text-slate-900 dark:text-white">{{ apptCounts.cancelled }}</p>
+                            <p class="text-lg font-bold text-slate-900 dark:text-white">{{ apptCounts.cancelled }}</p>
                         </div>
-                        <div class="rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-3">
+                        <div class="rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2.5">
                             <p class="text-xs text-slate-500">Rescheduled</p>
-                            <p class="text-xl font-bold text-slate-900 dark:text-white">{{ apptCounts.rescheduled }}</p>
+                            <p class="text-lg font-bold text-slate-900 dark:text-white">{{ apptCounts.rescheduled }}</p>
                         </div>
-                        <div class="rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-3">
+                        <div class="rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2.5">
                             <p class="text-xs text-slate-500">Completed</p>
-                            <p class="text-xl font-bold text-slate-900 dark:text-white">{{ apptCounts.completed }}</p>
+                            <p class="text-lg font-bold text-slate-900 dark:text-white">{{ apptCounts.completed }}</p>
                         </div>
                     </div>
-                    <apexchart type="bar" height="300" :options="barOptions" :series="barSeries" />
+                    <div class="w-full overflow-hidden">
+                        <apexchart type="bar" height="260" :options="barOptions" :series="barSeries" />
+                    </div>
                 </Card>
             </div>
 
             <div class="space-y-5">
-                <Card>
+                <!-- Calendar (hidden on xs, shown from sm up) -->
+                <Card class="hidden sm:block">
                     <div class="flex items-center justify-between mb-3">
                         <button class="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800" @click="calRef = calRef.subtract(1, 'month')">
                             <ChevronLeftIcon class="h-4 w-4" />
@@ -105,7 +108,7 @@ const inMonth = (d) => d.isSame(calRef.value, 'month');
                             <ChevronRightIcon class="h-4 w-4" />
                         </button>
                     </div>
-                    <div class="grid grid-cols-7 gap-1 text-center">
+                    <div class="grid grid-cols-7 gap-0.5 text-center">
                         <span v-for="d in ['Su','Mo','Tu','We','Th','Fr','Sa']" :key="d" class="text-xs font-medium text-slate-400 py-1">{{ d }}</span>
                         <button
                             v-for="d in daysInGrid"
@@ -118,23 +121,18 @@ const inMonth = (d) => d.isSame(calRef.value, 'month');
                     </div>
                 </Card>
 
-                <Card title="Appointments">
-                    <template #actions>
-                        <select class="text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2 py-1">
-                            <option>All Type</option>
-                        </select>
-                    </template>
-                    <ul class="space-y-3 max-h-80 overflow-y-auto scrollbar-thin pr-1">
+                <Card title="Recent Appointments">
+                    <ul class="space-y-3 max-h-72 overflow-y-auto scrollbar-thin pr-1">
                         <li v-for="a in upcoming" :key="a.id" class="flex items-start gap-3 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                            <span class="grid h-9 w-9 place-items-center rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 text-xs font-semibold flex-shrink-0">
+                            <span class="grid h-8 w-8 place-items-center rounded-full bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 text-xs font-semibold shrink-0">
                                 {{ a.patient?.[0] ?? '?' }}
                             </span>
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm font-semibold text-slate-900 dark:text-white truncate">{{ a.service }}</p>
-                                <p class="text-xs text-slate-500 truncate">{{ a.patient }} with {{ a.doctor }}</p>
-                                <p class="text-xs text-slate-400 mt-0.5">{{ dayjs(a.scheduled_at).format('ddd, DD MMM YYYY, hh:mm A') }}</p>
+                                <p class="text-xs text-slate-500 truncate">{{ a.patient }} · {{ a.doctor }}</p>
+                                <p class="text-xs text-slate-400 mt-0.5">{{ dayjs(a.scheduled_at).format('DD MMM, hh:mm A') }}</p>
                             </div>
-                            <StatusPill :status="a.status" />
+                            <StatusPill :status="a.status" class="shrink-0" />
                         </li>
                         <li v-if="!upcoming.length" class="text-sm text-slate-500 text-center py-6">No upcoming appointments</li>
                     </ul>

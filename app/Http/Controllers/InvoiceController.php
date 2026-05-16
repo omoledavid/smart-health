@@ -22,11 +22,16 @@ class InvoiceController extends Controller
             $query->where('patient_id', optional($user->patient)->id);
         }
 
+        $statsBase = Invoice::query();
+        if ($user->isPatient()) {
+            $statsBase->where('patient_id', optional($user->patient)->id);
+        }
+
         $stats = [
-            'total' => Invoice::count(),
-            'paid_cents' => Invoice::where('status', 'paid')->sum('total_cents'),
-            'pending_cents' => Invoice::where('status', '!=', 'paid')->sum('total_cents'),
-            'overdue' => Invoice::whereNotNull('due_on')
+            'total'         => (clone $statsBase)->count(),
+            'paid_cents'    => (clone $statsBase)->where('status', 'paid')->sum('total_cents'),
+            'pending_cents' => (clone $statsBase)->where('status', '!=', 'paid')->sum('total_cents'),
+            'overdue'       => (clone $statsBase)->whereNotNull('due_on')
                 ->where('due_on', '<', now())
                 ->where('status', '!=', 'paid')
                 ->count(),

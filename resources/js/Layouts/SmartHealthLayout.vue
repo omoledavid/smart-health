@@ -5,7 +5,7 @@ import { useDark, useToggle, onClickOutside } from '@vueuse/core';
 import {
     HomeIcon, UserGroupIcon, UsersIcon, CalendarDaysIcon, MapPinIcon,
     BriefcaseIcon, AcademicCapIcon, DocumentTextIcon, BanknotesIcon,
-    ChatBubbleLeftRightIcon, BellIcon, MagnifyingGlassIcon,
+    ChatBubbleLeftRightIcon, BellIcon,
     SunIcon, MoonIcon, ChevronDownIcon, Bars3Icon, XMarkIcon, SparklesIcon,
     ArrowLeftStartOnRectangleIcon, ShieldCheckIcon, ChartBarIcon,
     ClipboardDocumentListIcon, QueueListIcon, ArrowTopRightOnSquareIcon,
@@ -64,7 +64,6 @@ const navGroups = computed(() => {
                 ...(role.value === 'admin' ? [{ name: 'Doctors', href: route('doctors.index'), icon: UserGroupIcon, route: 'doctors.*' }] : []),
                 { name: 'Patients', href: route('patients.index'), icon: UsersIcon, route: 'patients.*' },
                 { name: 'Appointments', href: route('appointments.index'), icon: CalendarDaysIcon, route: 'appointments.*' },
-                { name: 'Consultations', href: route('consultations.index'), icon: DocumentTextIcon, route: 'consultations.*' },
                 ...(role.value === 'admin' ? [
                     { name: 'Locations', href: route('locations.index'), icon: MapPinIcon, route: 'locations.*' },
                     { name: 'Services', href: route('services.index'), icon: BriefcaseIcon, route: 'services.*' },
@@ -78,7 +77,7 @@ const navGroups = computed(() => {
         groups.push({
             title: 'My Care',
             items: [
-                { name: 'My Appointments', href: route('appointments.index'), icon: CalendarDaysIcon, route: 'appointments.*' },
+                { name: 'My Appointments', href: route('appointments.index'), icon: CalendarDaysIcon, route: () => { const c = route().current(); return !!c?.startsWith('appointments.') && c !== 'appointments.book'; } },
                 { name: 'Book Appointment', href: route('appointments.book'), icon: PlusCircleIcon, route: 'appointments.book' },
             ],
         });
@@ -104,6 +103,7 @@ const navGroups = computed(() => {
 });
 
 const isActive = (pattern) => {
+    if (typeof pattern === 'function') return pattern();
     const current = route().current();
     if (!current) return false;
     if (pattern.endsWith('.*')) {
@@ -179,25 +179,13 @@ const logout = () => router.post(route('logout'));
             <!-- Topbar -->
             <header class="sticky top-0 z-30 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
                 <div class="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8 gap-4">
-                    <div class="flex items-center gap-3 flex-1">
+                    <div class="flex items-center gap-3">
                         <button class="lg:hidden text-slate-500" @click="sidebarOpen = true">
                             <Bars3Icon class="h-6 w-6" />
                         </button>
-                        <div class="relative max-w-md flex-1 hidden sm:block">
-                            <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                            <input
-                                type="text"
-                                placeholder="Search..."
-                                class="w-full pl-10 pr-12 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                            />
-                            <kbd class="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded px-1.5 py-0.5">⌘</kbd>
-                        </div>
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <button class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm font-medium shadow">
-                            <SparklesIcon class="h-4 w-4" /> AI Assistance
-                        </button>
                         <button class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800" @click="toggleDark()">
                             <SunIcon v-if="isDark" class="h-5 w-5" />
                             <MoonIcon v-else class="h-5 w-5" />

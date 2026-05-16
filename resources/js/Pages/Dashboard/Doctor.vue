@@ -13,7 +13,7 @@ defineProps({ stats: Object, schedule: Array });
 <template>
     <Head title="Doctor Dashboard" />
     <SmartHealthLayout title="Doctor Dashboard">
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard label="Today's appointments" :value="stats.today_appointments" :icon="CalendarDaysIcon" icon-bg="bg-brand-600" />
             <StatCard label="Upcoming" :value="stats.upcoming" :icon="ClockIcon" icon-bg="bg-sky-500" />
             <StatCard label="My patients" :value="stats.total_patients" :icon="UsersIcon" icon-bg="bg-emerald-500" />

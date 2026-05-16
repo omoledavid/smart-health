@@ -16,7 +16,7 @@ const onboardingPct = computed(() => Math.min(100, ((props.patient?.onboarding_s
 <template>
     <Head title="My Health Dashboard" />
     <SmartHealthLayout :title="`Hello, ${patient?.full_name ?? 'Patient'}`">
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard label="Upcoming" :value="stats.upcoming" :icon="ClockIcon" icon-bg="bg-brand-600" />
             <StatCard label="Past visits" :value="stats.past" :icon="CalendarDaysIcon" icon-bg="bg-sky-500" />
             <StatCard label="Open invoices" :value="stats.open_invoices" :icon="BanknotesIcon" icon-bg="bg-amber-500" />

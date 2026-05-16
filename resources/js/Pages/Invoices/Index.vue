@@ -12,7 +12,8 @@ import dayjs from 'dayjs';
 defineProps({ invoices: Object, stats: Object });
 const money = (c) => '$' + ((c ?? 0) / 100).toFixed(2);
 const user = computed(() => usePage().props.auth?.user);
-const isAdmin = computed(() => user.value?.role === 'admin');
+const isAdmin   = computed(() => user.value?.role === 'admin')
+const isPatient = computed(() => user.value?.role === 'patient');
 </script>
 
 <template>
@@ -38,19 +39,29 @@ const isAdmin = computed(() => user.value?.role === 'admin');
         <Card padding="p-0">
             <table class="w-full text-sm">
                 <thead class="text-left text-xs uppercase tracking-wider text-slate-400 bg-slate-50 dark:bg-slate-800/50">
-                    <tr><th class="px-5 py-3">#</th><th class="px-5 py-3">Patient</th><th class="px-5 py-3">Issued</th><th class="px-5 py-3">Total</th><th class="px-5 py-3">Paid</th><th class="px-5 py-3">Status</th><th class="px-5 py-3"></th></tr>
+                    <tr>
+                        <th class="px-5 py-3">#</th>
+                        <th v-if="!isPatient" class="px-5 py-3">Patient</th>
+                        <th class="px-5 py-3">Issued</th>
+                        <th class="px-5 py-3">Total</th>
+                        <th class="px-5 py-3">Paid</th>
+                        <th class="px-5 py-3">Status</th>
+                        <th class="px-5 py-3"></th>
+                    </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                     <tr v-for="i in invoices.data" :key="i.id">
                         <td class="px-5 py-3 font-mono text-xs">{{ i.number }}</td>
-                        <td class="px-5 py-3">{{ i.patient?.first_name }} {{ i.patient?.last_name }}</td>
+                        <td v-if="!isPatient" class="px-5 py-3">{{ i.patient?.first_name }} {{ i.patient?.last_name }}</td>
                         <td class="px-5 py-3">{{ i.issued_on ? dayjs(i.issued_on).format('DD MMM YYYY') : '—' }}</td>
                         <td class="px-5 py-3">{{ money(i.total_cents) }}</td>
                         <td class="px-5 py-3">{{ money(i.paid_cents) }}</td>
                         <td class="px-5 py-3"><StatusPill :status="i.status" /></td>
                         <td class="px-5 py-3 text-right"><Link :href="route('invoices.show', i.id)" class="text-brand-600 hover:underline text-sm">View</Link></td>
                     </tr>
-                    <tr v-if="!invoices.data.length"><td colspan="7" class="px-5 py-10 text-center text-slate-500">No invoices yet.</td></tr>
+                    <tr v-if="!invoices.data.length">
+                        <td :colspan="isPatient ? 6 : 7" class="px-5 py-10 text-center text-slate-500">No invoices yet.</td>
+                    </tr>
                 </tbody>
             </table>
         </Card>
