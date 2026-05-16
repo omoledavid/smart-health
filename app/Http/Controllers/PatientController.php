@@ -78,8 +78,8 @@ class PatientController extends Controller
         $patientData = collect($data)->except(['insurance_provider_id', 'insurance_plan_id', 'policy_number', 'group_number'])->all();
 
         $patientData['mrn'] = 'MRN-' . strtoupper(Str::random(8));
-        $patientData['onboarding_status'] = Patient::ONBOARDING_COMPLETED;
-        $patientData['onboarding_step'] = 4;
+        $patientData['onboarding_status'] = Patient::ONBOARDING_PENDING;
+        $patientData['onboarding_step'] = 0;
         $patient = Patient::create($patientData);
 
         if (! empty($insuranceData['insurance_provider_id'])) {
