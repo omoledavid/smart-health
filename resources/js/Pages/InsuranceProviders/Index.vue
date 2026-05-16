@@ -26,8 +26,8 @@ const destroy = (id) => {
     <Head title="Insurance Providers" />
     <SmartHealthLayout title="Insurance Providers">
         <template #actions>
-            <button @click="showAdd = !showAdd" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium">
-                <PlusIcon class="h-4 w-4" /> Add Provider
+            <button @click="showAdd = !showAdd" class="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-medium whitespace-nowrap">
+                <PlusIcon class="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" /> Add Provider
             </button>
         </template>
 
@@ -64,7 +64,37 @@ const destroy = (id) => {
             </form>
         </Card>
 
-        <Card padding="p-0">
+        <!-- Mobile card list -->
+        <div class="sm:hidden space-y-3">
+            <div v-for="p in providers.data" :key="p.id"
+                class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+                <div class="flex items-start justify-between gap-2">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <BuildingOffice2Icon class="h-5 w-5 text-slate-400 shrink-0" />
+                        <Link :href="route('insurance-providers.show', p.id)"
+                            class="font-semibold text-slate-900 dark:text-white hover:text-brand-600 truncate">
+                            {{ p.name }}
+                        </Link>
+                    </div>
+                    <StatusPill :status="p.status" class="shrink-0" />
+                </div>
+                <div class="mt-2 space-y-0.5 pl-7">
+                    <p class="text-sm text-slate-600 dark:text-slate-400">{{ p.email || '—' }}</p>
+                    <p class="text-xs text-slate-500">{{ p.phone || '' }}</p>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-xs font-medium mt-1">
+                        {{ p.plans_count }} {{ p.plans_count === 1 ? 'plan' : 'plans' }}
+                    </span>
+                </div>
+                <div class="mt-3 flex gap-4 pl-7">
+                    <Link :href="route('insurance-providers.show', p.id)" class="text-brand-600 hover:underline text-sm font-medium">Manage</Link>
+                    <button @click="destroy(p.id)" class="text-red-500 hover:underline text-sm">Delete</button>
+                </div>
+            </div>
+            <p v-if="!providers.data.length" class="text-center text-slate-500 text-sm py-10">No insurance providers yet.</p>
+        </div>
+
+        <!-- Desktop table -->
+        <Card padding="p-0" class="hidden sm:block">
             <table class="w-full text-sm">
                 <thead class="text-left text-xs uppercase tracking-wider text-slate-400 bg-slate-50 dark:bg-slate-800/50">
                     <tr>

@@ -22,7 +22,7 @@ const search = () => router.get(route('patients.index'), { q: q.value }, { prese
             </Link>
         </template>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <StatCard label="Total Patients" :value="stats.total" :icon="UsersIcon" icon-bg="bg-brand-600" />
             <StatCard label="New This Month" :value="stats.new_this_month" :icon="UserPlusIcon" icon-bg="bg-emerald-500" />
             <StatCard label="Male / Female" :value="`${stats.male} / ${stats.female}`" :icon="HeartIcon" icon-bg="bg-pink-500" />

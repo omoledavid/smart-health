@@ -29,7 +29,7 @@ const isPatient = computed(() => user.value?.role === 'patient');
                 </Link>
             </div>
         </template>
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <StatCard label="Total Invoices" :value="stats.total" :icon="DocumentTextIcon" icon-bg="bg-brand-600" />
             <StatCard label="Paid" :value="money(stats.paid_cents)" :icon="BanknotesIcon" icon-bg="bg-emerald-500" />
             <StatCard label="Pending" :value="money(stats.pending_cents)" :icon="ClockIcon" icon-bg="bg-amber-500" />

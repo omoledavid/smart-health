@@ -15,7 +15,7 @@ const money = (c) => '$' + ((c ?? 0) / 100).toFixed(2);
 <template>
     <Head title="Insurance Claims" />
     <SmartHealthLayout title="Insurance Claims">
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <StatCard label="Total Claims" :value="stats.total" :icon="ShieldCheckIcon" icon-bg="bg-brand-600" />
             <StatCard label="Approved" :value="money(stats.approved_cents)" :icon="BanknotesIcon" icon-bg="bg-emerald-500" />
             <StatCard label="Pending" :value="stats.pending" :icon="ClockIcon" icon-bg="bg-amber-500" />

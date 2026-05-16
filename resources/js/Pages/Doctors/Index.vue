@@ -16,7 +16,7 @@ defineProps({ doctors: Object, stats: Object });
                 <PlusIcon class="h-4 w-4" /> Add Doctor
             </Link>
         </template>
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <StatCard label="Total Doctors" :value="stats.total" :icon="UserGroupIcon" icon-bg="bg-brand-600" />
             <StatCard label="Specializations" :value="stats.specializations" :icon="AcademicCapIcon" icon-bg="bg-amber-500" />
             <StatCard label="Avg Experience" :value="`${stats.avg_experience} yrs`" :icon="ClockIcon" icon-bg="bg-sky-500" />
